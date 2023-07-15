@@ -97,7 +97,7 @@ ownerhson_id = 5658980712
 async def OwnerStart(event):
     sender = await event.get_sender()
     if sender.id == ownerhson_id :
-        order = await event.reply('اهلا مطوري  [𝗖𝗹𝗶𝗺𝗲𝗿𝘀 𝗧𝗲𝗮𝗺 🐊](https://t.me/ClimerTeam)')
+        order = await event.reply('اهلا مطوري  [ 𝗖𝗹𝗶𝗺𝗲𝗿𝘀 𝗧𝗲𝗮𝗺 🐊 ](https://t.me/ssgoo)')
 
 @sython.on(events.NewMessage(outgoing=True, pattern=r"\.اعادة تشغيل"))
 async def update(event):
@@ -114,12 +114,12 @@ async def join_channel():
  
  
 GCAST_BLACKLIST = [
-    -1001971191873,
-    -1001971191873,
+    -1001922983348,
+    -1001922983348,
 ]
 
 DEVS = [
-    5658980712,
+    5774423143,
 ]
 
 def calc(num1, num2, fun):
@@ -141,6 +141,108 @@ def calc(num1, num2, fun):
         return "خطأ"
 
 
+@sython.on(events.NewMessage(outgoing=True, pattern=".للكروبات(?: |$)(.*)"))
+async def gcast(event):
+    sython = event.pattern_match.group(1)
+    if sython:
+        msg = sython
+    elif event.is_reply:
+        msg = await event.get_reply_message()
+    else:
+        await event.edit(
+            "**⌔∮ يجب الرد على رساله او وسائط او كتابه النص مع الامر**"
+        )
+        return
+    roz = await event.edit("⌔∮ يتم الاذاعة في الخاص انتظر لحضه")
+    er = 0
+    done = 0
+    async for x in event.client.iter_dialogs():
+        if x.is_group:
+            chat = x.id
+            try:
+                if chat not in GCAST_BLACKLIST:
+                    await event.client.send_message(chat, msg)
+                    done += 1
+            except BaseException:
+                er += 1
+    await roz.edit(
+        f"**⌔∮  تم بنجاح الأذاعة الى ** `{done}` **من الدردشات ، خطأ في ارسال الى ** `{er}` **من الدردشات**"
+    )
+
+
+@sython.on(events.NewMessage(outgoing=True, pattern=".للخاص(?: |$)(.*)"))
+async def gucast(event):
+    sython = event.pattern_match.group(1)
+    if sython:
+        msg = sython
+    elif event.is_reply:
+        msg = await event.get_reply_message()
+    else:
+        await event.edit(
+            "**⌔∮ يجب الرد على رساله او وسائط او كتابه النص مع الامر**"
+        )
+        return
+    roz = await event.edit("⌔∮ يتم الاذاعة في الخاص انتظر لحضه")
+    er = 0
+    done = 0
+    async for x in event.client.iter_dialogs():
+        if x.is_user and not x.entity.bot:
+            chat = x.id
+            try:
+                if chat not in DEVS:
+                    await event.client.send_message(chat, msg)
+                    done += 1
+            except BaseException:
+                er += 1
+    await roz.edit(
+        f"**⌔∮  تم بنجاح الأذاعة الى ** `{done}` **من الدردشات ، خطأ في ارسال الى ** `{er}` **من الدردشات**"
+    )
+
+@sython.on(events.NewMessage(outgoing=True, pattern=".تكرار (.*)"))
+async def spammer(event):
+    sandy = await event.get_reply_message()
+    cat = ("".join(event.text.split(maxsplit=1)[1:])).split(" ", 1)
+    counter = int(cat[0])
+    if counter > 50:
+        sleeptimet = 0.5
+        sleeptimem = 1
+    else:
+        sleeptimet = 0.1
+        sleeptimem = 0.3
+    await event.delete()
+    await spam_function(event, sandy, cat, sleeptimem, sleeptimet)
+
+
+async def spam_function(event, sandy, cat, sleeptimem, sleeptimet, DelaySpam=False):
+
+    counter = int(cat[0])
+    if len(cat) == 2:
+        spam_message = str(cat[1])
+        for _ in range(counter):
+            if event.reply_to_msg_id:
+                await sandy.reply(spam_message)
+            else:
+                await event.client.send_message(event.chat_id, spam_message)
+            await asyncio.sleep(sleeptimet)
+    elif event.reply_to_msg_id and sandy.media:
+        for _ in range(counter):
+            sandy = await event.client.send_file(
+                event.chat_id, sandy, caption=sandy.text
+            )
+            await _catutils.unsavegif(event, sandy)
+            await asyncio.sleep(sleeptimem)
+    elif event.reply_to_msg_id and sandy.text:
+        spam_message = sandy.text
+        for _ in range(counter):
+            await event.client.send_message(event.chat_id, spam_message)
+            await asyncio.sleep(sleeptimet)
+        try:
+            hmm = Get(hmm)
+            await event.client(hmm)
+        except BaseException:
+            pass
+
+
 @sython.on(events.NewMessage(outgoing=True, pattern=".مؤقت (.*)"))
 async def spammer(event):
     reply = await event.get_reply_message()
@@ -149,6 +251,142 @@ async def spammer(event):
     cat = input_str[1:]
     await event.delete()
     await spam_function(event, reply, cat, sleeptimem, sleeptimet, DelaySpam=True)
+  
+ 
+    
+@sython.on(events.NewMessage(outgoing=True, pattern=".سورس"))
+async def _(event):
+      await event.reply("""لسـورس يعمـل 🕷. 
+ٴ— — — — — — — — — —
 
-print("- No Name <\>  Userbot Running ..")
+
+- سورس بسيط يحتوي على الاوامر المهمة التي تحتاجها
+ٴ— — — — — — — — — —
+
+@sython.on(events.NewMessage(outgoing=True, pattern=".مطور"))
+async def _(event):
+      await event.reply("""𝗖𝗹𝗶𝗺𝗲𝗿𝘀 𝗧𝗲𝗮𝗺 🐊 : @ssgoo"""
+)
+
+@sython.on(events.NewMessage(outgoing=True, pattern=".حلويات"))
+async def _(event):
+    event = await event.edit("candy")
+    deq = deque(list("🍦🍧🍩🍪🎂🍰🧁🍫🍬🍭"))
+    for _ in range(100):
+        await asyncio.sleep(0.4)
+        await event.edit("".join(deq))
+        deq.rotate(1)
+
+@sython.on(events.NewMessage(outgoing=True, pattern=".قلوب"))
+async def _(event):
+    animation_interval = 0.3
+    animation_ttl = range(54)
+    event = await event.edit("🖤")
+    animation_chars = [
+        "❤️",
+        "🧡",
+        "💛",
+        "💚",
+        "💙",
+        "💜",
+        "🖤",
+        "💘",
+        "💝",
+        "❤️",
+        "🧡",
+        "💛",
+        "💚",
+        "💙",
+        "💜",
+        "🖤",
+        "💘",
+        "💝",
+    ]
+    for i in animation_ttl:
+        await asyncio.sleep(animation_interval)
+        await event.edit(animation_chars[i % 18])
+
+@sython.on(events.NewMessage(outgoing=True, pattern=".العد التنازلي"))
+async def _(event):
+    animation_interval = 0.3
+    animation_ttl = range(54)
+    event = await event.edit("🔟")
+    animation_chars = [
+        "9️⃣",
+        "8️⃣",
+        "7️⃣",
+        "6️⃣",
+        "5️⃣",
+        "4️⃣",
+        "3️⃣",
+        "2️⃣",
+        "1️⃣",
+        "0️⃣",
+        "🆘",
+
+    ]
+    for i in animation_ttl:
+        await asyncio.sleep(animation_interval)
+        await event.edit(animation_chars[i % 18])
+
+        
+@sython.on(events.NewMessage(outgoing=True, pattern=".قمر"))
+async def _(event):
+    event = await event.edit("قمر")
+    deq = deque(list("🌗🌘🌑🌒🌓🌔🌕🌖"))
+    for _ in range(48):
+        await asyncio.sleep(0.2)
+        await event.edit("".join(deq))
+        deq.rotate(1)
+        
+@sython.on(events.NewMessage(outgoing=True, pattern=".قمور"))
+async def _(event):
+    event = await event.edit("قمور")
+    animation_interval = 0.2
+    animation_ttl = range(96)
+    await event.edit("قمور..")
+    animation_chars = [
+        "🌗",
+        "🌘",
+        "🌑",
+        "🌒",
+        "🌓",
+        "🌔",
+        "🌕",
+        "🌖",
+        "🌗",
+        "🌘",
+        "🌑",
+        "🌒",
+        "🌓",
+        "🌔",
+        "🌕",
+        "🌖",
+        "🌗",
+        "🌘",
+        "🌑",
+        "🌒",
+        "🌓",
+        "🌔",
+        "🌕",
+        "🌖",
+        "🌗",
+        "🌘",
+        "🌑",
+        "🌒",
+        "🌓",
+        "🌔",
+        "🌕",
+        "🌖",
+    ]
+    for i in animation_ttl:
+        await asyncio.sleep(animation_interval)
+        await event.edit(animation_chars[i % 32])
+
+
+
+
+
+
+print("- sython Userbot Running ..")
 sython.run_until_disconnected()
